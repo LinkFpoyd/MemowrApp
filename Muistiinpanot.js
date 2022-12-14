@@ -100,7 +100,7 @@ export default function Muistiinpanot() {
         <View style={styles.list}> 
           <Text>{item.teksti}</Text>
         </View>
-          <Text style={{color: '#871a2c', marginLeft: '90%'}} onPress={() => deleteItem(item.id)} >Done</Text>
+          <Text style={{color: '#871a2c', marginLeft: '85%'}} onPress={() => deleteItem(item.id)} >Poista</Text>
         </Card>
         }
         keyExtractor={(item, index) => index.toString()}

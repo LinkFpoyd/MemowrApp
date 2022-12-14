@@ -20,7 +20,7 @@ export default function Nauhoitin() {
   function createTable(){
     db.transaction(tx => {
       tx.executeSql('create table if not exists aanitteet (id integer primary key not null, otsikko text, kesto text, polku text, sound text);');  
-     }, null, updateList);
+     }, null, updateList); // sound on tosiasiassa päivämäärä. 
     
   } 
 
@@ -70,7 +70,9 @@ export default function Nauhoitin() {
       name: tallenneNimi,
       duration: getDurationFormatted(status.durationMillis),
       file: tallenne.getURI()
-    });
+    }); // tämän... voisi kai tehdä fiksumminkin. Toimintalogiikka oli hieman erilainen projektin alkuvaiheessa, jolloin tämä kyseinen tapa oli järkevämpi
+    // toimii kuitenkin nytkin, joten annoin olla. Tallennetusta äänitteestä otetaan ja sille viedään lisätietoja tietokantaan tallennusta varten.
+    // lisaaTallenne array toimii välimuotona (arrayna joka sisältää yhden objektin kerrallaan) jonka tiedot viedään tietokantaan.
 
     lisaaListaan(lisaaTallenne[0])
 
@@ -85,7 +87,7 @@ export default function Nauhoitin() {
       tx.executeSql('insert into aanitteet (otsikko, kesto, polku, sound) values (?, ?, ?, ?);',
         [aanite.name.toString(), aanite.duration.toString(), aanite.file.toString(), Date().toString()]);
           }, null, updateList)
-  } // sound on sinänsä turha viedä tietokantaan, sitä ei oikeastaan tarvita. Jätän nyt toistaiseksi kuitenkin. 
+  } // sound on oikeasti päivämäärä
 
   function getDurationFormatted(millis) {
     const minutes = millis / 1000 / 60;
@@ -138,7 +140,7 @@ export default function Nauhoitin() {
         <Card.Divider/>
         <View style={styles.list}> 
           <Text>Kesto: {item.kesto}</Text>
-          <Text style={{color: '#871a2c', marginLeft: '45%', marginRight: '5%'}} onPress={() => deleteItem(item.id)} >Poista</Text>
+          <Text style={{color: '#871a2c', marginLeft: '50%', marginRight: '5%'}} onPress={() => deleteItem(item.id)} >Poista</Text>
           <Button title='Toista' onPress={() => playSound(item)} />
         </View>
         </Card>
